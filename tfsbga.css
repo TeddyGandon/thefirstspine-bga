@@ -1,0 +1,306 @@
+/**
+ *------
+ * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * tfsbga implementation : © <Your name here> <Your email address here>
+ *
+ * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
+ * See http://en.boardgamearena.com/#!doc/Studio for more information.
+ * -----
+ *
+ * tfsbga.css
+ *
+ * tfsbga stylesheet
+ *
+ */
+
+/*
+    This is the CSS stylesheet of your game User Interface.
+    
+    Styles defined on this file will be applied to the HTML elements you define in your
+    HTML template (tfsbga_tfsbga.tpl), and to HTML elements you create dynamically
+    (in tfsbga.js).
+    
+    Usually, you are using CSS to:
+    
+    1°) define the overall layout of your game
+        (ex: place the board on the top left, place player's hand beside, place the deck on the right, ...).
+
+    2°) create your CSS-sprites:
+        All images of your games should be gathered into a small number of image files. Then, using
+        background-image and background-position CSS properties, you create HTML blocks that can 
+        display these images correctly (see example below).
+    
+    3°) ... anything else:
+        It is really easy to add and remove CSS classes dynamically from your Javascript with
+        dojo.addClass and dojo.removeClass. It is also easy to check if an element has a class
+        (dojo.hasClass) or to get all elements with a specific class (dojo.query). This is why,
+        very often, using CSS classes for the logic of your user interface allow you to do complex
+        thing easily.
+        
+        
+     Note: on the production platform, this file will be compressed and comments will be removed.
+           Consequently, don't hesitate to put as many comments as necessary.
+*/
+
+@import url(../../../css/csslayer.css); /* Note: you must not use any @import directive other than this one */
+
+/********* You can start writing your CSS below this line: **********/
+
+
+/*
+    Example of CSS sprites (a black token and a white token, 20x20px each, embedded in the same "tokens.png" 40x20px image):
+
+    .white_token {
+        background-image: url('img/tokens.png');
+        background-position: 0px 0px;
+    }
+    .black_token {
+        background-image: url('img/tokens.png');
+        background-position: -20px 0px;
+    }
+    .token {
+        width: 20px;
+        height: 20px;
+        background-repeat: none;
+    }
+*/
+
+/* BOARD */
+
+#board {
+    display: block;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #334;
+    background-image: url(img/board.jpg);
+    background-size: contain;
+}
+
+#board .cell {
+    float: left;
+    width: 14.2857143%;
+    position: relative;
+}
+
+#board .cell .card {
+    position: absolute;
+    top: 2%;
+    left: 2%;
+    width: 96%;
+    height: 96%;
+    background-color: black;
+    padding-top: 70%;
+    box-sizing: border-box
+}
+
+#board .cell img {
+    width: 100%;
+}
+
+/* HAND */
+
+#hand {
+    text-align: center;
+}
+
+#hand .card {
+    display: inline-block;
+    width: 200px;
+    height: 200px;
+    margin-right: -30px;
+    margin-left: -30px;
+    background-color: black;
+    background-repeat: no-repeat;
+    z-index: auto;
+    position: relative;
+    margin-top: 0;
+    transition: transform .5s;
+    padding-top: 110px;
+    box-sizing: border-box;
+}
+
+#hand .card:hover {
+    z-index: 3;
+    transform: rotate(0deg) scale(1.2)!important;
+}
+
+/* GENERAL CARD CLASSES */
+
+.card.selectable, .cell.selectable {
+    cursor: pointer;
+}
+
+.card.selected:after, .cell.selected:after {
+    background: rgba(255,255,255,.75)!important;
+}
+
+.card.selectable:after, .cell.selectable:after {
+    content: " ";
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    margin-left: -25px;
+    margin-top: -25px;
+    border-radius: 50px;
+    background: rgba(255,255,255,.25);
+    animation-name: animationFrames;
+    animation-duration: 3s;
+    animation-timing-function: ease;
+    animation-iteration-count: 3000;
+    transform-origin: 50% 50%;
+}
+
+.card .marker, .card .button {
+    position: relative;
+    border-radius: 1000px;
+    border: 3px double #FFF;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    font-size: 11px;
+    color: #FFF;
+    vertical-align: middle;
+    margin: 0 3px;
+}
+
+.card .marker *, .card .button * {
+    vertical-align: middle;
+}
+
+.card .marker-life {
+    background: #222;
+}
+
+.card .marker-str {
+    background: #822;
+}
+
+.card .marker-def {
+    background: #228;
+}
+
+.card .button {
+    background: #000;
+    cursor: pointer;
+}
+
+.card .button:hover {
+    background: #333;
+}
+
+@keyframes animationFrames{
+    0% {
+        transform:  scaleX(1.00) scaleY(1.00) ;
+    }
+    51% {
+        transform:  scaleX(0.50) scaleY(0.50) ;
+    }
+    100% {
+        transform:  scaleX(1.00) scaleY(1.00) ;
+    }
+}
+
+/* ZOOM */
+
+#zoom {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,.5);
+    display: none;
+}
+#zoom.displayed {
+    display: block;
+}
+
+#zoom #zoom-image {
+    background-color: #000;
+    border: 0;
+    width: 400px;
+    position: relative;
+    margin: 20% auto;
+    display: block;
+    height: 400px;
+}
+
+/* CARD SPRITE CLASSES */
+
+
+.card-spritesheet {
+    background-image: url(img/cards.png);
+    background-size: 1000%;
+}
+.card-spritesheet-1 { background-position: 0% 0% }
+.card-spritesheet-2 { background-position: 11.1% 0% }
+.card-spritesheet-3 { background-position: 22.2% 0% }
+.card-spritesheet-4 { background-position: 33.3% 0% }
+.card-spritesheet-5 { background-position: 44.4% 0% }
+.card-spritesheet-6 { background-position: 55.5% 0% }
+.card-spritesheet-7 { background-position: 66.6% 0% }
+.card-spritesheet-8 { background-position: 77.7% 0% }
+.card-spritesheet-9 { background-position: 88.8% 0% }
+.card-spritesheet-10 { background-position: 100% 0% }
+.card-spritesheet-11 { background-position: 0% 25% }
+.card-spritesheet-12 { background-position: 11.1% 25% }
+.card-spritesheet-13 { background-position: 22.2% 25% }
+.card-spritesheet-14 { background-position: 33.3% 25% }
+.card-spritesheet-15 { background-position: 44.4% 25% }
+.card-spritesheet-16 { background-position: 55.5% 25% }
+.card-spritesheet-17 { background-position: 66.6% 25% }
+.card-spritesheet-18 { background-position: 77.7% 25% }
+.card-spritesheet-19 { background-position: 88.8% 25% }
+.card-spritesheet-20 { background-position: 100% 25% }
+.card-spritesheet-21 { background-position: 0% 50% }
+.card-spritesheet-22 { background-position: 11.1% 50% }
+.card-spritesheet-23 { background-position: 22.2% 50% }
+.card-spritesheet-24 { background-position: 33.3% 50% }
+.card-spritesheet-25 { background-position: 44.4% 50% }
+.card-spritesheet-26 { background-position: 55.5% 50% }
+.card-spritesheet-27 { background-position: 66.6% 50% }
+.card-spritesheet-28 { background-position: 77.7% 50% }
+.card-spritesheet-29 { background-position: 88.8% 50% }
+.card-spritesheet-30 { background-position: 100% 50% }
+.card-spritesheet-31 { background-position: 0% 75% }
+.card-spritesheet-32 { background-position: 11.1% 75% }
+.card-spritesheet-33 { background-position: 22.2% 75% }
+.card-spritesheet-34 { background-position: 33.3% 75% }
+.card-spritesheet-35 { background-position: 44.4% 75% }
+.card-spritesheet-36 { background-position: 55.5% 75% }
+.card-spritesheet-37 { background-position: 66.6% 75% }
+.card-spritesheet-38 { background-position: 77.7% 75% }
+.card-spritesheet-39 { background-position: 88.8% 75% }
+.card-spritesheet-40 { background-position: 100% 75% }
+.card-spritesheet-41 { background-position: 0% 100% }
+.card-spritesheet-42 { background-position: 11.1% 100% }
+.card-spritesheet-43 { background-position: 22.2% 100% }
+.card-spritesheet-44 { background-position: 33.3% 100% }
+.card-spritesheet-45 { background-position: 44.4% 100% }
+.card-spritesheet-46 { background-position: 55.5% 100% }
+.card-spritesheet-47 { background-position: 66.6% 100% }
+.card-spritesheet-48 { background-position: 77.7% 100% }
+.card-spritesheet-49 { background-position: 88.8% 100% }
+.card-spritesheet-53 { background-position: 100% 100% }
+
+/* UTILITIES */
+
+.clearfix {
+    overflow: auto;
+}
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+.text-center {
+    text-align: center;
+}
+
+strong {
+    font-weight: bolder !important;
+}
