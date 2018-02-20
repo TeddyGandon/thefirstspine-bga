@@ -330,21 +330,33 @@ define([
             setActions: function (actions) {
                 this.actions = actions;
 
-                if (actions.length > 0) {
+                if (this.actions.length > 0) {
                     $('generalactions').innerHTML = '<br />';
                 }
 
                 const self = this;
-                for (var i = 0; i < actions.length; i++) {
+                for (var i = 0; i < this.actions.length; i++) {
                     this.addActionButton(
-                        'action_' + actions[i].arena_game_action_id,
-                        _(actions[i].title),
+                        'action_' + this.actions[i].arena_game_action_id,
+                        _(this.actions[i].title),
                         function (event) {
                             const id = event.target.id;
                             self.choseAction(id.replace('action_', ''));
                         },
                         'generalactions'
                     );
+                }
+
+                if (this.actions.length === 1) {
+                    this.choseAction(this.actions[0].arena_game_action_id);
+                }
+
+                if (this.actions.length === 2) {
+                    if (this.actions[0].reference === 'SkipSpell') {
+                        this.choseAction(this.actions[1].arena_game_action_id);
+                    } else if (this.actions[1].reference === 'SkipSpell') {
+                        this.choseAction(this.actions[0].arena_game_action_id);
+                    }
                 }
             },
 
@@ -509,6 +521,10 @@ define([
                     } else {
                         cardDomElement.classList.add('selected');
                     }
+                }
+
+                if ($scope.getCurrentActionScript().params.min === 1 && $scope.getCurrentActionScript().params.max === 1) {
+                    $scope.validateActionScript();
                 }
             },
 
