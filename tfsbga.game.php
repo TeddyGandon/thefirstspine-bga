@@ -406,10 +406,13 @@ class tfsbga extends Table
             // Send the message to the game logs
             if (!in_array((int) $message->arena_message_id, $messagesSent))
             {
+                $player = $this->getObjectFromDB("SELECT * FROM player WHERE tfs_user_id = {$message->user_id}");
+                $playerName = $player['player_name'];
+                $messageStr = str_replace('*', '${player_name}', $message->message);
                 $this->notifyAllPlayers(
                     'noType',
-                    $message->message,
-                    $message->attributes()
+                    _($messageStr),
+                    array('player_name' => $playerName)
                 );
                 $messagesSent[] = (int) $message->arena_message_id;
             }
