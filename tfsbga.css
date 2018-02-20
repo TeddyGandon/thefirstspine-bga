@@ -183,13 +183,24 @@
     background: #228;
 }
 
-.card .button {
+.card .marker-capacity-terre_brulee {
     background: #000;
-    cursor: pointer;
 }
 
-.card .button:hover {
-    background: #333;
+.card .marker-capacity-trahison {
+    background: #000;
+}
+
+.card .marker-capacity-mort_subite {
+    background: #000;
+}
+
+.card .marker-capacity-croissance {
+    background: #000;
+}
+
+.card .marker-capacity-course {
+    background: #000;
 }
 
 @keyframes animationFrames{
