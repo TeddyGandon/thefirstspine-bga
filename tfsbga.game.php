@@ -35,6 +35,7 @@ class tfsbga extends Table
     const STORAGE__MESSAGES = 'messages';
     const STORAGE__MESSAGES_SENT = 'messages_sent';
     const STORAGE__JWT = 'jwt';
+    const STORAGE__CODES = 'jwt';
 
     function __construct()
     {
@@ -183,6 +184,19 @@ class tfsbga extends Table
             }
         }
 
+        // Get the generated codes here
+        $codes = $this->retrieveStoredObject(self::STORAGE__CODES);
+        if (!is_null($codes))
+        {
+            foreach ($codes as $code)
+            {
+                if ($code['player_id'] == $currentPlayerId)
+                {
+                    $result['code'] = $code['code'];
+                }
+            }
+        }
+
         return $result;
     }
 
@@ -309,6 +323,35 @@ class tfsbga extends Table
             // Check for the game end
             if ($game['is_opened'] !== 1)
             {
+                // Generate the codes
+                $codes = array();
+                for ($i = 0; $i < 4; $i ++)
+                {
+                    if (isset($game["users"][$i]) && !is_null($game["users"][$i]))
+                    {
+                        // Generate a code with the user's loot
+                        $code = new \thefirstspine\apiwrapper\resources\Code();
+                        $code->loots = array();
+                        foreach ($game["loots"][$i] as $loot)
+                        {
+                            $code->loots[$loot['loot_name']] = $loot['num'];
+                        }
+                        $code->save();
+
+                        // Attach code to the player
+                        $userId = $game["users"][$i]['user_id'];
+                        $player = $this->getObjectFromDB("SELECT * FROM player WHERE tfs_user_id = {$userId}");
+                        $codes[] = array(
+                            'player_id' => $player['player_id'],
+                            'code' => $code->code
+                        );
+                    }
+                }
+
+                // Store codes in database
+                $this->storeObject(self::STORAGE__CODES, $codes);
+
+                // Go endgame state
                 $this->gamestate->nextState('gameEnd');
             }
         }
