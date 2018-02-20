@@ -7,7 +7,7 @@ $psr4Classes = array(
     '/resources/ArenaGame',
     '/resources/ArenaCard',
     '/resources/ArenaGameAction',
-    '/resources/Code',
+    '/resources/ArenaMessage',
 );
 
 foreach ($psr4Classes as $psr4Class)
