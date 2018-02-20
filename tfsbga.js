@@ -288,8 +288,8 @@ define([
                                     this.format_block(
                                         'jstpl_marker',
                                         {
-                                            type: 'capacity',
-                                            value: game.board[i].options.capacities[j]
+                                            type: 'capacity-' + game.board[i].options.capacities[j],
+                                            value: ''
                                         }
                                     ),
                                     'card-'+game.board[i].arena_card_id
