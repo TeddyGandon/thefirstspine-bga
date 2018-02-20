@@ -32,6 +32,8 @@ class tfsbga extends Table
     const STORAGE__ARENA_GAME = 'arenagame';
     const STORAGE__ACTIONS = 'actions';
     const STORAGE__CARDS = 'cards';
+    const STORAGE__MESSAGES = 'messages';
+    const STORAGE__MESSAGES_SENT = 'messages_sent';
     const STORAGE__JWT = 'jwt';
 
     function __construct()
@@ -118,6 +120,7 @@ class tfsbga extends Table
         // Load basic data
         $this->reloadActions($game->arena_game_id);
         $this->reloadCards($game->arena_game_id);
+        $this->reloadMessages($game->arena_game_id);
 
         // Save blank JWTs
         $jwt = array();
@@ -151,6 +154,7 @@ class tfsbga extends Table
         $game = $this->reloadGame();
         $actions = $this->reloadActions($game['arena_game_id']);
         $cards = $this->reloadCards($game['arena_game_id']);
+        $messages = $this->reloadMessages($game['arena_game_id']);
 
         $result = array();
 
@@ -256,6 +260,7 @@ class tfsbga extends Table
             $game = $this->reloadGame();
             $this->reloadActions($game['arena_game_id']);
             $cards = $this->reloadCards($game['arena_game_id']);
+            $messages = $this->reloadMessages($game['arena_game_id']);
 
             // Update BGA-powered stats
             foreach ($cards as $card)
@@ -380,6 +385,44 @@ class tfsbga extends Table
             $actionsAttributes[] = $card->attributes();
         }
         return $this->storeObject(self::STORAGE__CARDS, $actionsAttributes);
+    }
+
+    protected function reloadMessages($arenaGameId)
+    {
+        // Get the send logs
+        $messagesSent = $this->retrieveStoredObject(self::STORAGE__MESSAGES_SENT);
+        $messagesSent = is_null($messagesSent) ? array() : $messagesSent;
+
+        // Get the messages of the ArenaGame instance
+        $messages = \thefirstspine\apiwrapper\resources\ArenaMessage::findAll(
+            array('arena_game_id' => $arenaGameId)
+        );
+
+        // Send & save the messages data
+        $messagesAttributes = array();
+        /** @var \thefirstspine\apiwrapper\resources\ArenaMessage $message */
+        foreach ($messages as $message)
+        {
+            // Send the message to the game logs
+            if (!in_array((int) $message->arena_message_id, $messagesSent))
+            {
+                $player = $this->getObjectFromDB("SELECT * FROM player WHERE tfs_user_id = {$message->user_id}");
+                $playerName = $player['player_name'];
+                $messageStr = str_replace('*', '${player_name}', $message->message);
+                $this->notifyAllPlayers(
+                    'noType',
+                    _($messageStr),
+                    array('player_name' => $playerName)
+                );
+                $messagesSent[] = (int) $message->arena_message_id;
+            }
+            $messagesAttributes[] = $message->attributes();
+        }
+
+        // Save the sent messages
+        $this->storeObject(self::STORAGE__MESSAGES_SENT, $messagesSent);
+
+        return $this->storeObject(self::STORAGE__MESSAGES, $messagesAttributes);
     }
 
     protected function actionsProcessor()
