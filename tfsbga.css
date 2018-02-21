@@ -184,23 +184,28 @@
 }
 
 .card .marker-capacity-terre_brulee {
-    background: #000;
+    background-color: #000;
+    background-image: url('img/terre_brule.png');
 }
 
 .card .marker-capacity-trahison {
-    background: #000;
+    background-color: #000;
+    background-image: url('img/trahison.png');
 }
 
 .card .marker-capacity-mort_subite {
-    background: #000;
+    background-color: #000;
+    background-image: url('img/mort_subite.png');
 }
 
 .card .marker-capacity-croissance {
-    background: #000;
+    background-color: #000;
+    background-image: url('img/croissance.png');
 }
 
 .card .marker-capacity-course {
-    background: #000;
+    background-color: #000;
+    background-image: url('img/course.png');
 }
 
 @keyframes animationFrames{
