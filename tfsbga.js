@@ -97,9 +97,24 @@ define([
                 // Get the user ID according with the TFS SSO
                 this.setupSSO();
 
+                // Setup events listeners
                 $('zoom').addEventListener('click', function(e) {
                     $('zoom').classList.remove('displayed');
                 });
+
+                // Display the loot code if provided
+                if (gamedata.code) {
+                    $('code').classList.add('displayed');
+                    dojo.place(
+                        this.format_block(
+                            'jstpl_code',
+                            {
+                                code: gamedata.code
+                            }
+                        ),
+                        'code'
+                    );
+                }
 
                 console.log("Ending game setup");
             },
@@ -220,6 +235,7 @@ define([
             },
 
             setGame: function (game) {
+                if (!game || !game.board) return;
                 this.currentGame = game;
 
                 // Reset the cells
@@ -301,6 +317,8 @@ define([
             },
 
             setHand: function (hand) {
+                if (!hand) return;
+
                 this.currentHand = hand;
 
                 // Reset the hand
@@ -328,6 +346,7 @@ define([
             },
 
             setActions: function (actions) {
+                if (!actions || !this.currentGame || this.currentGame.is_opened == 0) return;
                 this.actions = actions;
 
                 if (this.actions.length > 0) {
@@ -516,14 +535,16 @@ define([
                 // Toggle card selection
                 if ($scope.canChoseCard(arenaCard)) {
                     const cardDomElement = $('card-'+arenaCardId);
-                    if (inArray('selected', cardDomElement.classList)) {
-                        cardDomElement.classList.remove('selected');
-                    } else {
-                        cardDomElement.classList.add('selected');
+                    if (cardDomElement) {
+                        if (inArray('selected', cardDomElement.classList)) {
+                            cardDomElement.classList.remove('selected');
+                        } else {
+                            cardDomElement.classList.add('selected');
+                        }
                     }
                 }
 
-                if ($scope.getCurrentActionScript().params.min === 1 && $scope.getCurrentActionScript().params.max === 1) {
+                if ($scope.getCurrentActionScript() && $scope.getCurrentActionScript().params && $scope.getCurrentActionScript().params.min === 1 && $scope.getCurrentActionScript().params.max === 1) {
                     $scope.validateActionScript();
                 }
             },

@@ -25,6 +25,8 @@
     Please REMOVE this comment before publishing your game on BGA
 -->
 
+<div id="code" class="whiteblock clearfix text-center"></div>
+
 <div class="whiteblock clearfix text-center">
     <div id="board" class="clearfix">
     </div>
@@ -51,6 +53,7 @@
     const jstpl_square = '<div id="cell_${x}-${y}" data-x="${x}" data-y="${y}" class="cell"></div>';
     const jstpl_card = '<div id="card-${arena_card_id}" class="card card-spritesheet card-spritesheet-${view.spritesheetId}" style="transform: rotate(${view.rotation}deg); background-color: ${view.color}" title="${card.name}" data-type="${card.type}" data-id="${arena_card_id}" data-user_id="${user_id}" data-spritesheet-id="${view.spritesheetId}"></div>';
     const jstpl_marker = '<div class="marker marker-${type} marker-${type}-${value}">${value}</div>';
+    const jstpl_code = '<div class="text-center"><p>Votre performance vous a donné droit à un code à entrer sur <a href="https://www.thefirstspine.fr/code" target="_blank">thefirstspine.fr/code</a> !</p><p><strong>${code}</strong></p></div>';
 
 </script>
 
