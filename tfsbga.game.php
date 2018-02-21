@@ -35,7 +35,7 @@ class tfsbga extends Table
     const STORAGE__MESSAGES = 'messages';
     const STORAGE__MESSAGES_SENT = 'messages_sent';
     const STORAGE__JWT = 'jwt';
-    const STORAGE__CODES = 'jwt';
+    const STORAGE__CODES = 'codes';
 
     function __construct()
     {
@@ -321,7 +321,8 @@ class tfsbga extends Table
             }
 
             // Check for the game end
-            if ($game['is_opened'] !== 1)
+            $state = $this->gamestate->state();
+            if ($game['is_opened'] !== 1 && $state['name'] !== 'gameEnd')
             {
                 // Generate the codes
                 $codes = array();
@@ -331,11 +332,12 @@ class tfsbga extends Table
                     {
                         // Generate a code with the user's loot
                         $code = new \thefirstspine\apiwrapper\resources\Code();
-                        $code->loots = array();
+                        $loots = array();
                         foreach ($game["loots"][$i] as $loot)
                         {
-                            $code->loots[$loot['loot_name']] = $loot['num'];
+                            $loots[$loot['loot_name']] = $loot['num'];
                         }
+                        $code->loots = $loots;
                         $code->save();
 
                         // Attach code to the player
