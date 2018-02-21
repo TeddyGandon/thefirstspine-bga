@@ -256,7 +256,7 @@ define([
                     ).addEventListener('contextmenu', this.onInfoCard);
                     if (game.board[i].options !== null) {
                         // Add life marker
-                        if (game.board[i].options.hasOwnProperty('life') && game.board[i].options.life != 0) {
+                        if (game.board[i].options.life && game.board[i].options.life != 0) {
                             dojo.place(
                                 this.format_block(
                                     'jstpl_marker',
@@ -269,7 +269,7 @@ define([
                             );
                         }
                         // Add strenght marker
-                        if (game.board[i].options.hasOwnProperty('str') && game.board[i].options.str != 0) {
+                        if (game.board[i].options.str && game.board[i].options.str != 0) {
                             dojo.place(
                                 this.format_block(
                                     'jstpl_marker',
@@ -282,14 +282,14 @@ define([
                             );
                         }
                         // Add capacities markers
-                        if (game.board[i].options.hasOwnProperty('capacities')) {
-                            for (var j = 0; j < game.board[j].options.capacities.length; j ++) {
+                        if (game.board[i].options.capacities) {
+                            for (var j = 0; j < game.board[i].options.capacities.length; j ++) {
                                 dojo.place(
                                     this.format_block(
                                         'jstpl_marker',
                                         {
-                                            type: 'capacity',
-                                            value: game.board[j].options.capacities[j]
+                                            type: 'capacity-' + game.board[i].options.capacities[j],
+                                            value: ''
                                         }
                                     ),
                                     'card-'+game.board[i].arena_card_id
