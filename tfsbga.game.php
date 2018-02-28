@@ -557,11 +557,19 @@ class tfsbga extends Table
     {
         $this->beforeAction(self::ACTION_CATEGORY__USER_MOVE);
 
-        $action = \thefirstspine\apiwrapper\resources\ArenaGameAction::findOne(array(
-            'arena_game_action_id' => $arenaGameActionId
-        ));
-        $action->response = $response;
-        $action->save();
+        $isReplay = (
+            preg_match('/replayLastTurn/', $_SERVER['HTTP_REFERER']) ||
+            preg_match('/replayFrom/', $_SERVER['HTTP_REFERER'])
+        );
+
+        if (!$isReplay)
+        {
+            $action = \thefirstspine\apiwrapper\resources\ArenaGameAction::findOne(array(
+                'arena_game_action_id' => $arenaGameActionId
+            ));
+            $action->response = $response;
+            $action->save();
+        }
 
         $this->afterAction(self::ACTION_CATEGORY__USER_MOVE);
 
