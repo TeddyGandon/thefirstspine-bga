@@ -248,9 +248,24 @@ define([
                 // Add the board
                 for (var i = 0; i < game.board.length; i++) {
                     // Calculated elements
-                    game.board[i].view = {
-                        spritesheetId: game.board[i].card.image.replace('images/cartes70', '').replace('.png', '')
-                    };
+                    if (!game.board[i].view) {
+                        game.board[i].view = {};
+                        if (game.board[i].card) {
+                            game.board[i].view.spritesheetId = game.board[i].card.image.replace('images/cartes70', '').replace('.png', '');
+                        } else if (game.board[i].square_type) {
+                            game.board[i].view.spritesheetId = game.board[i].square_type;
+                            game.board[i].card = {
+                                name: '',
+                                type: game.board[i].square_type
+                            };
+                        } else {
+                            game.board[i].card = {
+                                name: '',
+                                type: ''
+                            };
+                            game.board[i].view.spritesheetId = '';
+                        }
+                    }
                     if (game.board[i].user_id == game.users[0].user_id) {
                         game.board[i].view.rotation = 180;
                     }
@@ -263,6 +278,7 @@ define([
                         game.board[i].view.color = 'white';
                     }
                     // Place template
+                    console.log(game.board[i]);
                     dojo.place(
                         this.format_block(
                             'jstpl_card',
@@ -634,30 +650,36 @@ define([
                     }
                 }
 
-                /*
-
-                 // Filter the squares by 'nearPlayer' filter
-                 let nearPlayer = true;
-                 if (typeof(params.nearPlayer) !== 'undefined' && params.nearPlayer == true) {
-                 // The tiles coords
-                 let tilesByPlayerPosition = [
-                 {x: 3, y: 0},
-                 {x: 6, y: 3},
-                 {x: 3, y: 6},
-                 {x: 0, y: 3},
-                 ];
-                 let playerSquarePosition = tilesByPlayerPosition[this._currentPlayerPosition];
-                 if (
-                 (playerSquarePosition.y - 1 === y && playerSquarePosition.x === x) || // top
-                 (playerSquarePosition.y === y && playerSquarePosition.x + 1 === x) || // right
-                 (playerSquarePosition.y + 1 === y && playerSquarePosition.x === x) || // bottom
-                 (playerSquarePosition.y === y && playerSquarePosition.x - 1 === x) // left
-                 ) {
-                 } else {
-                 nearPlayer = false;
-                 }
-                 }
-                 */
+                // Filter the squares by 'nearPlayer' filter
+                var nearPlayer = true;
+                if (typeof(params.nearPlayer) !== 'undefined' && params.nearPlayer == true) {
+                    // The tiles coords
+                    var tilesByPlayerPosition = [
+                        {x: 3, y: 0},
+                        {x: 6, y: 3},
+                        {x: 3, y: 6},
+                        {x: 0, y: 3}
+                    ];
+                    var currentPlayerPosition = 0;
+                    for (var i = 0; i < tilesByPlayerPosition.length; i ++) {
+                        var cardDomElement = $('cell_'+tilesByPlayerPosition[i].x+'-'+tilesByPlayerPosition[i].y)
+                            .getElementsByClassName('card')
+                            .item(0);
+                        if (cardDomElement && cardDomElement.getAttribute('data-user_id') == this.currentUserId) {
+                            currentPlayerPosition = i;
+                        }
+                    }
+                    var playerSquarePosition = tilesByPlayerPosition[currentPlayerPosition];
+                    if (
+                        (playerSquarePosition.y - 1 == y && playerSquarePosition.x == x) || // top
+                        (playerSquarePosition.y == y && playerSquarePosition.x + 1 == x) || // right
+                        (playerSquarePosition.y + 1 == y && playerSquarePosition.x == x) || // bottom
+                        (playerSquarePosition.y == y && playerSquarePosition.x - 1 == x) // left
+                    ) {
+                    } else {
+                        nearPlayer = false;
+                    }
+                }
 
                  // Filter the squares by 'nextTo' filter
                 var nextTo = true;
@@ -676,8 +698,8 @@ define([
                     }
                 }
 
-                console.log(x, y, nearControlled, isEmpty, types, range, controlled, nextTo);
-                return nearControlled && isEmpty && types && range && controlled && nextTo;
+                console.log(x, y, nearControlled, isEmpty, types, range, controlled, nextTo && nearPlayer);
+                return nearControlled && isEmpty && types && range && controlled && nextTo && nearPlayer;
             },
 
             onChoseSquare: function (event) {
