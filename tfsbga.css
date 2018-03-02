@@ -245,11 +245,27 @@
 #zoom #zoom-image {
     background-color: #000;
     border: 0;
-    width: 400px;
+    width: 300px;
     position: relative;
-    margin: 20% auto;
+    margin: 50px auto;
     display: block;
-    height: 400px;
+    height: 300px;
+}
+
+#zoom #zoom-name {
+    font-weight: bold;
+    font-size: 1.5em;
+    width: 300px;
+    position: relative;
+    margin: 10px auto;
+    display: block;
+}
+
+#zoom #zoom-description {
+    width: 300px;
+    position: relative;
+    margin: 10px auto;
+    display: block;
 }
 
 /* CODE */

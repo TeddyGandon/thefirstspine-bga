@@ -207,9 +207,15 @@ define([
 
             zoom: function (btn) {
                 const image = btn.parentNode.getAttribute('data-spritesheet-id');
+                const name = btn.parentNode.getAttribute('data-name');
+                const description = base64Decode(btn.parentNode.getAttribute('data-descriptionEscaped'));
+
+                console.log(btn.parentNode.getAttribute('data-descriptionEscaped'));
 
                 $('zoom').classList.add('displayed');
                 $('zoom-image').className = 'card-spritesheet card-spritesheet-'+image;
+                $('zoom-name').textContent = _(name);
+                $('zoom-description').innerHTML = _(description);
             },
 
             setupSSO: function () {
@@ -284,6 +290,7 @@ define([
                     } else {
                         game.board[i].view.color = 'white';
                     }
+                    game.board[i].view.descriptionEscaped = base64Encode(game.board[i].card.description);
                     // Place template
                     console.log(game.board[i]);
                     dojo.place(
@@ -353,7 +360,8 @@ define([
                     hand[i].view = {
                         rotation: 0,
                         color: 'black',
-                        spritesheetId: hand[i].card.image.replace('images/cartes70', '').replace('.png', '')
+                        spritesheetId: hand[i].card.image.replace('images/cartes70', '').replace('.png', ''),
+                        descriptionEscaped: base64Encode(hand[i].card.description)
                     };
                     // Place template
                     var card = dojo.place(
@@ -867,4 +875,9 @@ inArray = function (needle, haystack) {
 
 base64Encode = function (input) {
     return window.btoa(input);
+};
+
+
+base64Decode = function (input) {
+    return window.atob(input);
 };

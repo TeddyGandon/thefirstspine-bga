@@ -38,6 +38,8 @@
 
 <div id="zoom">
     <div id="zoom-image"></div>
+    <div id="zoom-name"></div>
+    <div id="zoom-description"></div>
 </div>
 
 <script type="text/javascript">
@@ -51,7 +53,7 @@
      */
 
     const jstpl_square = '<div id="cell_${x}-${y}" data-x="${x}" data-y="${y}" class="cell"></div>';
-    const jstpl_card = '<div id="card-${arena_card_id}" class="card card-spritesheet card-spritesheet-${view.spritesheetId}" style="transform: rotate(${view.rotation}deg); background-color: ${view.color}" title="${card.name}" data-type="${card.type}" data-id="${arena_card_id}" data-user_id="${user_id}" data-spritesheet-id="${view.spritesheetId}"><span onclick="$scope.zoom(this)" class="zoom bgabutton bgabutton_blue"><span class="fa fa-eye"></span></span></div>';
+    const jstpl_card = '<div id="card-${arena_card_id}" class="card card-spritesheet card-spritesheet-${view.spritesheetId}" style="transform: rotate(${view.rotation}deg); background-color: ${view.color}" title="${card.name}" data-type="${card.type}" data-id="${arena_card_id}" data-user_id="${user_id}" data-spritesheet-id="${view.spritesheetId}" data-name="${card.name}" data-descriptionEscaped="${view.descriptionEscaped}"><span onclick="$scope.zoom(this)" class="zoom bgabutton bgabutton_blue"><span class="fa fa-eye"></span></span></div>';
     const jstpl_marker = '<div class="marker marker-${type} marker-${type}-${value}">${value}</div>';
     const jstpl_code = '<div class="text-center"><p>Votre performance vous a donné droit à un code à entrer sur <a href="https://www.thefirstspine.fr/code" target="_blank">thefirstspine.fr/code</a> !</p><p><strong>${code}</strong></p></div>';
 
