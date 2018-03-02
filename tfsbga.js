@@ -205,6 +205,13 @@ define([
 
              */
 
+            zoom: function (btn) {
+                const image = btn.parentNode.getAttribute('data-spritesheet-id');
+
+                $('zoom').classList.add('displayed');
+                $('zoom-image').className = 'card-spritesheet card-spritesheet-'+image;
+            },
+
             setupSSO: function () {
                 const url = 'https://www.thefirstspine.fr/api/sso?key=bga-studio';
                 const request = new XMLHttpRequest();
@@ -285,7 +292,7 @@ define([
                             game.board[i]
                         ),
                         'cell_' + game.board[i].position
-                    ).addEventListener('contextmenu', this.onInfoCard);
+                    );
                     if (game.board[i].options !== null) {
                         // Add life marker
                         if (game.board[i].options.life && game.board[i].options.life != 0) {
@@ -357,7 +364,6 @@ define([
                         'hand'
                     );
                     card.addEventListener('click', this.onChoseCard);
-                    card.addEventListener('contextmenu', this.onInfoCard);
                 }
             },
 
@@ -540,6 +546,10 @@ define([
             },
 
             onChoseCard: function (event) {
+                if (!inArray('card', event.target.classList)) {
+                    return;
+                }
+
                 const arenaCardId = event.target.getAttribute('data-id');
 
                 var arenaCard = null;
@@ -563,17 +573,6 @@ define([
                 if ($scope.getCurrentActionScript() && $scope.getCurrentActionScript().params && $scope.getCurrentActionScript().params.min === 1 && $scope.getCurrentActionScript().params.max === 1) {
                     $scope.validateActionScript();
                 }
-            },
-
-            onInfoCard: function (event) {
-                event.preventDefault();
-                const image = event.target.getAttribute('data-spritesheet-id');
-                $scope.displayZoom(image);
-            },
-
-            displayZoom: function (image) {
-                $('zoom').classList.add('displayed');
-                $('zoom-image').className = 'card-spritesheet card-spritesheet-'+image;
             },
 
             action_choseSquare: function () {
@@ -704,8 +703,9 @@ define([
 
             onChoseSquare: function (event) {
                 var effectiveTarget = event.target.parentNode;
-
-                console.log(effectiveTarget);
+                if (!inArray('cell', effectiveTarget.classList)) {
+                    return;
+                }
 
                 const x = parseInt(effectiveTarget.getAttribute('data-x'));
                 const y = parseInt(effectiveTarget.getAttribute('data-y'));
