@@ -221,6 +221,12 @@
     }
 }
 
+.card .zoom {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
 /* ZOOM */
 
 #zoom {
