@@ -29,7 +29,7 @@
   class view_tfsbga_tfsbga extends game_view
   {
     function getGameName() {
-        return "tfsbga";
+        return "The First Spine";
     }    
   	function build_page( $viewArgs )
   	{		
