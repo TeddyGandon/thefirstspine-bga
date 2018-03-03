@@ -460,7 +460,7 @@ define([
                 }
 
                 // Set the message
-                $('generalactions').innerHTML = '<br />' + script.message + '<br />';
+                $('generalactions').innerHTML = '<br />' + _(script.message) + '<br />';
                 this.addActionButton('validate', _('Valider'), 'validateActionScript', 'generalactions');
                 this.addActionButton('cancel', _('Annuler'), 'cancelActionScript', 'generalactions');
 
