@@ -456,7 +456,7 @@ class tfsbga extends Table
                 $messageStr = str_replace('*', '${player_name}', $message->message);
                 $this->notifyAllPlayers(
                     'noType',
-                    _($messageStr),
+                    totranslate($messageStr),
                     array('player_name' => $playerName)
                 );
                 $messagesSent[] = (int) $message->arena_message_id;
