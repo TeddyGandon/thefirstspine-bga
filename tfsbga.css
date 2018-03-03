@@ -230,7 +230,7 @@
 /* ZOOM */
 
 #zoom {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -247,7 +247,7 @@
     border: 0;
     width: 300px;
     position: relative;
-    margin: 50px auto;
+    margin: 100px auto 0 auto;
     display: block;
     height: 300px;
 }
