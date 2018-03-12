@@ -211,9 +211,21 @@ class tfsbga extends Table
     */
     function getGameProgression()
     {
-        // TODO: compute and return the game progression
+        $totLife = 20;
+        $cards = $this->retrieveStoredObject(self::STORAGE__CARDS);
+        foreach ($cards as $card)
+        {
+            if (
+                isset($card['card']['type']) &&
+                isset($card['options']['life']) &&
+                $card['card']['type'] === 'player'
+            )
+            {
+                $totLife += $card['options']['life'];
+            }
+        }
 
-        return 0;
+        return 100 - ($totLife * (100 / 20));
     }
 
 
