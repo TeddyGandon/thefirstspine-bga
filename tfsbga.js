@@ -874,7 +874,7 @@ inArray = function (needle, haystack) {
 };
 
 base64Encode = function (input) {
-    return window.btoa(input);
+    return window.btoa(input.replace(/[\u0250-\ue007]/g, ''));
 };
 
 
