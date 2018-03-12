@@ -101,8 +101,7 @@ class tfsbga extends Table
 
         // Init game statistics
         // (note: statistics used in this file must be defined in your stats.inc.php file)
-        //self::initStat( 'table', 'table_teststat1', 0 );    // Init a table statistics
-        //self::initStat( 'player', 'player_teststat1', 0 );  // Init a player statistics (for all players)
+        self::initStat('table', 'turns_played', 0);
 
         // Setup the initial game situation here
 
@@ -557,18 +556,28 @@ class tfsbga extends Table
     {
         $this->beforeAction(self::ACTION_CATEGORY__USER_MOVE);
 
+        // Getting if we are in a replay sequence or not
         $isReplay = (
             preg_match('/replayLastTurn/', $_SERVER['HTTP_REFERER']) ||
             preg_match('/replayFrom/', $_SERVER['HTTP_REFERER'])
         );
 
+        // Get the action to respond
+        $action = \thefirstspine\apiwrapper\resources\ArenaGameAction::findOne(array(
+            'arena_game_action_id' => $arenaGameActionId
+        ));
+
+        // Only respond to the server out of a replay
         if (!$isReplay)
         {
-            $action = \thefirstspine\apiwrapper\resources\ArenaGameAction::findOne(array(
-                'arena_game_action_id' => $arenaGameActionId
-            ));
             $action->response = $response;
             $action->save();
+        }
+
+        if ($action->reference === 'EndTurn')
+        {
+            // Increase turn stats
+            self::incStat(1, 'turns_played');
         }
 
         $this->afterAction(self::ACTION_CATEGORY__USER_MOVE);
