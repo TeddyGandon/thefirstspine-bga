@@ -12,6 +12,9 @@
 
 $gameinfos = array(
 
+// Disable 3D
+    'enable_3d' => false,
+
 // Name of the game in English (will serve as the basis for translation)
     'game_name' => "The First Spine",
 
