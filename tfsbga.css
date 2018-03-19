@@ -347,30 +347,34 @@ span.stats.capacity {
     display: block;
 }
 
+#zoom .zoom-content {
+    position: relative;
+    margin: 100px auto 0 auto;
+    display: block;
+    width: 300px;
+    padding: 20px;
+    background: #FFF;
+    border: 2px solid #666;
+    border-radius: 5px;
+}
+
 #zoom #zoom-image {
     background-color: #000;
     border: 0;
     width: 300px;
-    position: relative;
-    margin: 100px auto 0 auto;
-    display: block;
     height: 300px;
 }
 
 #zoom #zoom-name {
     font-weight: bold;
     font-size: 1.5em;
-    width: 300px;
-    position: relative;
-    margin: 10px auto;
-    display: block;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 #zoom #zoom-description {
-    width: 300px;
     position: relative;
-    margin: 10px auto;
-    display: block;
+    margin-top: 20px;
 }
 
 /* CODE */
@@ -457,4 +461,8 @@ span.stats.capacity {
 
 strong {
     font-weight: bolder !important;
+}
+
+em {
+    font-style: italic;
 }

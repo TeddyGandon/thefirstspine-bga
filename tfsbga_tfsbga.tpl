@@ -37,9 +37,11 @@
 </div>
 
 <div id="zoom">
-    <div id="zoom-image"></div>
-    <div id="zoom-name"></div>
-    <div id="zoom-description"></div>
+    <div class="zoom-content">
+        <div id="zoom-name"></div>
+        <div id="zoom-image"></div>
+        <div id="zoom-description"></div>
+    </div>
 </div>
 
 <script type="text/javascript">
