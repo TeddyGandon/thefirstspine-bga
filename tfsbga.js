@@ -32,8 +32,6 @@ define([
             currentActionScriptIndex: 0,
 
             constructor: function () {
-                console.log('tfsbga constructor');
-
                 window['$scope'] = this;
 
                 // Here, you can init the global variables of your user interface
@@ -56,8 +54,6 @@ define([
              */
 
             setup: function (gamedata) {
-                console.log("Starting game setup", gamedata);
-
                 // Build the squares of the board
                 for (var y = 0; y < 8; y ++) {
                     for (var x = 0; x < 8; x ++) {
@@ -115,8 +111,6 @@ define([
                         'code'
                     );
                 }
-
-                console.log("Ending game setup");
             },
 
 
@@ -127,8 +121,6 @@ define([
             //                  You can use this method to perform some user interface changes at this moment.
             //
             onEnteringState: function (stateName, args) {
-                console.log('Entering state: ' + stateName);
-
                 switch (stateName) {
 
                     /* Example:
@@ -151,8 +143,6 @@ define([
             //                 You can use this method to perform some user interface changes at this moment.
             //
             onLeavingState: function (stateName) {
-                console.log('Leaving state: ' + stateName);
-
                 switch (stateName) {
 
                     /* Example:
@@ -175,8 +165,6 @@ define([
             //                        action status bar (ie: the HTML links in the status bar).
             //
             onUpdateActionButtons: function (stateName, args) {
-                console.log('onUpdateActionButtons: ' + stateName);
-
                 if (this.isCurrentPlayerActive()) {
                     switch (stateName) {
                         /*
@@ -209,8 +197,6 @@ define([
                 const image = btn.parentNode.getAttribute('data-spritesheet-id');
                 const name = btn.parentNode.getAttribute('data-name');
                 const description = base64Decode(btn.parentNode.getAttribute('data-descriptionEscaped'));
-
-                console.log(btn.parentNode.getAttribute('data-descriptionEscaped'));
 
                 $('zoom').classList.add('displayed');
                 $('zoom-image').className = 'card-spritesheet card-spritesheet-'+image;
@@ -292,7 +278,6 @@ define([
                     }
                     game.board[i].view.descriptionEscaped = base64Encode(game.board[i].card.description);
                     // Place template
-                    console.log(game.board[i]);
                     dojo.place(
                         this.format_block(
                             'jstpl_card',
@@ -705,7 +690,6 @@ define([
                     }
                 }
 
-                console.log(x, y, nearControlled, isEmpty, types, range, controlled, nextTo && nearPlayer);
                 return nearControlled && isEmpty && types && range && controlled && nextTo && nearPlayer;
             },
 
@@ -803,8 +787,6 @@ define([
              */
 
             setupNotifications: function () {
-                console.log('notifications subscriptions setup');
-
                 // Here, associate your game notifications with local methods
                 dojo.subscribe('gameUpdated', this, 'notif_gameUpdated');
                 dojo.subscribe('handUpdated', this, 'notif_handUpdated');
@@ -839,17 +821,14 @@ define([
              */
 
             notif_gameUpdated: function (notif) {
-                console.log('notif_gameUpdated', notif);
                 this.setGame(notif.args);
             },
 
             notif_handUpdated: function (notif) {
-                console.log('notif_handUpdated', notif);
                 this.setHand(notif.args);
             },
 
             notif_actionRequired: function (notif) {
-                console.log('notif_actionRequired', notif);
                 this.setActions(notif.args);
             }
         });
