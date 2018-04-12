@@ -223,8 +223,11 @@ class QueryBuilder extends Model {
         // Init curl
         $curl = curl_init($url);
 
-        // Add credentials
-        $headers = array('X-API-Credentials: ' . $config['credentials']);
+        // Add credentials & language
+        $headers = array(
+            'X-API-Credentials: ' . $config['credentials'],
+            'Accept-Language: ' . $config['language'],
+        );
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
         // Return output
