@@ -250,7 +250,7 @@ define([
                     if (!game.board[i].view) {
                         game.board[i].view = {};
                         if (game.board[i].card) {
-                            game.board[i].view.spritesheetId = game.board[i].card.image.replace('images/cartes70', '').replace('.png', '');
+                            game.board[i].view.spritesheetId = game.board[i].card.image.replace('images/cards70', '').replace('.png', '');
                         } else if (game.board[i].square_type) {
                             game.board[i].view.spritesheetId = game.board[i].square_type;
                             game.board[i].card = {
@@ -345,7 +345,7 @@ define([
                     hand[i].view = {
                         rotation: 0,
                         color: 'black',
-                        spritesheetId: hand[i].card.image.replace('images/cartes70', '').replace('.png', ''),
+                        spritesheetId: hand[i].card.image.replace('images/cards70', '').replace('.png', ''),
                         descriptionEscaped: base64Encode(hand[i].card.description)
                     };
                     // Place template
