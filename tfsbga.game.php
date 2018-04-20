@@ -293,11 +293,21 @@ class tfsbga extends Table
                 if ($card['card']['type'] === 'player')
                 {
                     $userId = $card['user_id'];
-                    $points = isset($card['options']['life']) ?
+                    $score = isset($card['options']['life']) ?
                         10 + $card['options']['life'] :
                         10;
-                    $sql = "UPDATE player SET player_score = {$points} WHERE tfs_user_id = {$userId}";
-                    self::DbQuery($sql);
+                    $scoreAux = 0;
+                    foreach ($cards as $card2)
+                    {
+                        if (
+                            $card2['user_id'] === $userId &&
+                            ($card2['location'] === 'hand' || $card2['location'] === 'deck')
+                        )
+                        {
+                            $scoreAux ++;
+                        }
+                    }
+                    self::DbQuery("UPDATE player SET player_score = {$score}, player_score_aux = {$scoreAux} WHERE tfs_user_id = {$userId}");
                 }
             }
 
