@@ -674,29 +674,23 @@ class tfsbga extends Table
 
     function zombieTurn($state, $active_player)
     {
-        $statename = $state['name'];
+        // Get the game REST entity
+        $oldGame = $this->retrieveStoredObject(self::STORAGE__ARENA_GAME);
+        $arenaGameId = $oldGame['arena_game_id'];
+        $game = \thefirstspine\apiwrapper\resources\ArenaGame::find(array(
+            'arena_game_id' => $arenaGameId
+        ))->one();
 
-        if ($state['type'] === "activeplayer")
-        {
-            switch ($statename)
-            {
-                default:
-                    $this->gamestate->nextState("zombiePass");
-                    break;
-            }
+        // Get the player
+        $currentPlayer = self::getObjectFromDB("SELECT * FROM player WHERE player_id = {$active_player}");
+        $tfsUserId = $currentPlayer['tfs_user_id'];
 
-            return;
-        }
+        // Set the player to a zombie in TFS game instance
+        $game->zombies = "[{$tfsUserId}]";
+        $game->save();
 
-        if ($state['type'] === "multipleactiveplayer")
-        {
-            // Make sure player is in a non blocking status for role turn
-            $this->gamestate->setPlayerNonMultiactive($active_player, '');
-
-            return;
-        }
-
-        throw new feException("Zombie mode not supported at this game state: " . $statename);
+        // Update game local
+        $this->reloadGame();
     }
 
 ///////////////////////////////////////////////////////////////////////////////////:
