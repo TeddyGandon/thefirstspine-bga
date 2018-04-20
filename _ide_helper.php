@@ -54,6 +54,7 @@ class Table {
      * Get the "active_player", whatever what is the current state type.
      * Note: it does NOT mean that this player is active right now, because state type could be "game" or "multiplayer"
      * Note: avoid using this method in a "multiplayer" state because it does not mean anything.
+     * @return int
      */
     protected function getActivePlayerId()
     {
