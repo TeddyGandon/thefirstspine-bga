@@ -511,6 +511,9 @@ class tfsbga extends Table
             }
         }
 
+        // Give some time to the player
+        $this->giveExtraTime(self::getActivePlayerId());
+
         // Notify the player that he can play some move =)
         $this->notifyPlayer(
             $playerToPlay['player_id'],
