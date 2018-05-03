@@ -255,12 +255,14 @@ define([
                             game.board[i].view.spritesheetId = game.board[i].square_type;
                             game.board[i].card = {
                                 name: '',
-                                type: game.board[i].square_type
+                                type: game.board[i].square_type,
+                                description: ''
                             };
                         } else {
                             game.board[i].card = {
                                 name: '',
-                                type: ''
+                                type: '',
+                                description: ''
                             };
                             game.board[i].view.spritesheetId = '';
                         }
