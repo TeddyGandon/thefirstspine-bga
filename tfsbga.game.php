@@ -109,7 +109,9 @@ class tfsbga extends Table
         $arenaValidUsers = self::getArenaValidUserIds();
         $game = new \thefirstspine\apiwrapper\resources\ArenaGame();
         $game->user_id_1 = $arenaValidUsers[0];
+        $game->destiny_deck_id_1 = rand(1, 4);
         $game->user_id_3 = $arenaValidUsers[1];
+        $game->destiny_deck_id_3 = rand(1, 4);
         $game->is_opened = 1;
         $game->game_type = 'bga';
         $game->save();
