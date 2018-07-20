@@ -9,13 +9,17 @@ use thefirstspine\apiwrapper\core\Resource;
  * @package thefirstspine\apiwrapper\resources
  * @property int arena_game_id
  * @property int user_id_1
- * @property int deck_id_1
+ * @property int destiny_deck_id_1
+ * @property int origin_deck_id_1
  * @property int user_id_2
- * @property int deck_id_2
+ * @property int destiny_deck_id_2
+ * @property int origin_deck_id_2
  * @property int user_id_3
- * @property int deck_id_3
+ * @property int destiny_deck_id_3
+ * @property int origin_deck_id_3
  * @property int user_id_4
- * @property int deck_id_4
+ * @property int destiny_deck_id_4
+ * @property int origin_deck_id_4
  * @property int is_opened
  * @property string game_type
  * @property array options
