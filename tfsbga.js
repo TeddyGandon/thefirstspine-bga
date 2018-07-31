@@ -97,20 +97,6 @@ define([
                 $('zoom').addEventListener('click', function(e) {
                     $('zoom').classList.remove('displayed');
                 });
-
-                // Display the loot code if provided
-                if (gamedata.code) {
-                    $('code').classList.add('displayed');
-                    dojo.place(
-                        this.format_block(
-                            'jstpl_code',
-                            {
-                                code: gamedata.code
-                            }
-                        ),
-                        'code'
-                    );
-                }
             },
 
 
