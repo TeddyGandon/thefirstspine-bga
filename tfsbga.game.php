@@ -20,7 +20,7 @@
 require_once(APP_GAMEMODULE_PATH . 'module/table/table.game.php');
 
 // Add TFS API wrapper file
-include(__DIR__ . '/modules/apiwrapper/autoload.php');
+include(__DIR__ . '/modules/api-wrapper/autoload.php');
 
 
 class tfsbga extends Table
@@ -65,7 +65,7 @@ class tfsbga extends Table
 
     /*
         setupNewGame:
-        
+
         This method is called only once, when a new game is launched.
         In this method, you must setup the game according to the game rules, so that
         the game is ready to be played.
@@ -112,6 +112,10 @@ class tfsbga extends Table
         $game->user_id_3 = $arenaValidUsers[1];
         $game->is_opened = 1;
         $game->game_type = 'bga';
+        $game->destiny_deck_id_1 = rand(1, 4);
+        $game->destiny_deck_id_3 = rand(1, 4);
+        $game->origin_deck_id_1 = rand(9, 12);
+        $game->origin_deck_id_3 = rand(9, 12);
         $game->save();
 
         // Save the ArenaGame instance data
