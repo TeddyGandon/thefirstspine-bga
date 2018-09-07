@@ -54,7 +54,6 @@ class Table {
      * Get the "active_player", whatever what is the current state type.
      * Note: it does NOT mean that this player is active right now, because state type could be "game" or "multiplayer"
      * Note: avoid using this method in a "multiplayer" state because it does not mean anything.
-     * @return int
      */
     protected function getActivePlayerId()
     {
@@ -598,7 +597,7 @@ class GameState {
 /**
  * Class APP_GameAction
  * @property array viewArgs
- * @property Table|tfsbga //TODO: replace thefirstspineboardgamearena by your class name
+ * @property Table game
  * @property string view
  */
 class APP_GameAction
@@ -689,16 +688,43 @@ function clienttranslate($translation)
 }
 
 /**
- *
+ * An argument type.
+ * 'AT_alphanum' for a string with 0-9a-zA-Z_ and space
  */
 define('AT_alphanum', '');
 
 /**
- *
+ * An argument type.
+ * 'AT_numberlist' for a list of several numbers separated with "," or ";" (ex: exemple: 1,4;2,3;-1,2).
  */
 define('AT_numberlist', '');
 
 /**
- *
+ * An argument type.
+ * 'AT_posint' for a positive integer
  */
 define('AT_posint', '');
+
+/**
+ * An argument type.
+ * 'AT_float' for a float
+ */
+define('AT_float', '');
+
+/**
+ * An argument type.
+ * 'AT_bool' for 1/0/true/false
+ */
+define('AT_bool', '');
+
+/**
+ * An argument type.
+ * 'AT_enum' for an enumeration (argTypeDetails list the possible values as an array)
+ */
+define('AT_enum', '');
+
+/**
+ * An argument type.
+ * 'AT_int' for an integer
+ */
+define('AT_int', '');
