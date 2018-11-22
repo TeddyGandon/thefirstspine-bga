@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/arena-api-wrapper/autoload.php';
+require_once __DIR__ . '/autoload.php';
 
 $destinies = array(
     'conjurer',
