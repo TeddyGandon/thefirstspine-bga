@@ -22,6 +22,9 @@ require_once(APP_GAMEMODULE_PATH . 'module/table/table.game.php');
 // Add TFS API wrapper file
 include(__DIR__ . '/modules/api-wrapper/autoload.php');
 
+// Add TFS API wrapper file
+include(__DIR__ . '/modules/arena-api-wrapper/autoload.php');
+
 
 class tfsbga extends Table
 {
@@ -104,27 +107,33 @@ class tfsbga extends Table
         self::initStat('table', 'turns_played', 0);
 
         // Setup the initial game situation here
+        $destinies = self::getArenaValidDestinies();
+        $origins = self::getArenaValidOrigins();
+        $authTokens = self::getArenaValidAuthTokens();
 
-        // Create the ArenaGame instance
-        $arenaValidUsers = self::getArenaValidUserIds();
-        $game = new \thefirstspine\apiwrapper\resources\ArenaGame();
-        $game->user_id_1 = $arenaValidUsers[0];
-        $game->user_id_3 = $arenaValidUsers[1];
-        $game->is_opened = 1;
-        $game->game_type = 'bga';
-        $game->destiny_deck_id_1 = rand(1, 4);
-        $game->destiny_deck_id_3 = rand(1, 4);
-        $game->origin_deck_id_1 = rand(9, 12);
-        $game->origin_deck_id_3 = rand(9, 12);
-        $game->save();
+        $request = new \arenaApiWrapper\requests\CreateGameRequest();
+        $request->gameType = 'bga';
+        $request->players = array(
+            array(
+                'token' => $authTokens[0],
+                'destiny' => $destinies[rand(1, 3)],
+                'origin' => $origins[rand(1, 3)],
+            ),
+            array(
+                'token' => $authTokens[1],
+                'destiny' => $destinies[rand(1, 3)],
+                'origin' => $origins[rand(1, 3)],
+            ),
+        );
+        $game = \arenaApiWrapper\core\ArenaApiWrapper::createGame($request);
 
         // Save the ArenaGame instance data
-        $this->storeObject(self::STORAGE__ARENA_GAME, $game->attributes());
+        $this->storeObject(self::STORAGE__ARENA_GAME, $game);
 
         // Load basic data
-        $this->reloadActions($game->arena_game_id);
-        $this->reloadCards($game->arena_game_id);
-        $this->reloadMessages($game->arena_game_id);
+        $this->reloadActions($game['arena_game_id']);
+        $this->reloadCards($game['arena_game_id']);
+        $this->reloadMessages($game['arena_game_id']);
 
         // Save blank JWTs
         $jwt = array();
@@ -236,6 +245,34 @@ class tfsbga extends Table
         );
     }
 
+    public static function getArenaValidAuthTokens()
+    {
+        return array(
+            827 => 'FSSEe8DZnNRkUy2ntsln6bY7iNnmU9FGjayU5Ka552dcaNyv6HS38Ff9Im4WyO8w6uvjzInsR0PHS3YUPvh0kyWmxY3oehABYDA7',
+            828 =>  'uVMFdNupqj8BrHWjf3v4Y6jonv5SOw4Skraso0DUXH4O9iBc907jp14hukBQ9ftS3bI3x6ccZmqLIyUwupfJqe89Zw3tziEUV3Ss',
+        );
+    }
+
+    public static function getArenaValidDestinies()
+    {
+        return array(
+            'conjurer',
+            'summoner',
+            'sorcerer',
+            'hunter',
+        );
+    }
+
+    public static function getArenaValidOrigins()
+    {
+        return array(
+            'healer',
+            'surgeon',
+            'ignorant',
+            'architect',
+        );
+    }
+
     protected function storeObject($name, $object)
     {
         // Sanatize strings to prevent mysql injections
@@ -336,35 +373,6 @@ class tfsbga extends Table
             $state = $this->gamestate->state();
             if ($game['is_opened'] !== 1 && $state['name'] !== 'gameEnd')
             {
-                // Generate the codes
-                $codes = array();
-                for ($i = 0; $i < 4; $i ++)
-                {
-                    if (isset($game["users"][$i]) && !is_null($game["users"][$i]))
-                    {
-                        // Generate a code with the user's loot
-                        $code = new \thefirstspine\apiwrapper\resources\Code();
-                        $loots = array();
-                        foreach ($game["loots"][$i] as $loot)
-                        {
-                            $loots[$loot['loot_name']] = $loot['num'];
-                        }
-                        $code->loots = $loots;
-                        $code->save();
-
-                        // Attach code to the player
-                        $userId = $game["users"][$i]['user_id'];
-                        $player = $this->getObjectFromDB("SELECT * FROM player WHERE tfs_user_id = {$userId}");
-                        $codes[] = array(
-                            'player_id' => $player['player_id'],
-                            'code' => $code->code
-                        );
-                    }
-                }
-
-                // Store codes in database
-                $this->storeObject(self::STORAGE__CODES, $codes);
-
                 // Go endgame state
                 $this->gamestate->nextState('gameEnd');
             }
@@ -376,29 +384,29 @@ class tfsbga extends Table
         $oldGame = $this->retrieveStoredObject(self::STORAGE__ARENA_GAME);
         $arenaGameId = $oldGame['arena_game_id'];
 
-        $game = \thefirstspine\apiwrapper\resources\ArenaGame::find(array(
-            'arena_game_id' => $arenaGameId
-        ))->one();
+        $request = new \arenaApiWrapper\requests\GetGameRequest();
+        $request->arena_game_id = $arenaGameId;
+        $game = \arenaApiWrapper\core\ArenaApiWrapper::getGame($request);
 
-        return $this->storeObject(self::STORAGE__ARENA_GAME, $game->attributes());
+        return $this->storeObject(self::STORAGE__ARENA_GAME, $game);
     }
 
     protected function reloadActions($arenaGameId)
     {
         // Get the possible actions from the ArenaGame instance
-        $actions = \thefirstspine\apiwrapper\resources\ArenaGameAction::findAll(
-            array('is_active' => 1, 'arena_game_id' => $arenaGameId, 'group' => 1)
-        );
+        $request = new \arenaApiWrapper\requests\GetGameActionsRequest();
+        $request->arena_game_id = $arenaGameId;
+        $actions = \arenaApiWrapper\core\ArenaApiWrapper::getGameActions($request);
 
         // Sort actions
         if (!function_exists('usortCmp'))
         {
             function usortCmp($a, $b)
             {
-                if ($a->priority == $b->priority) {
+                if ($a['priority'] == $b['priority']) {
                     return 0;
                 }
-                return ($a->priority > $b->priority) ? -1 : 1;
+                return ($a['priority'] > $b['priority']) ? -1 : 1;
             }
         }
         usort(
@@ -407,11 +415,11 @@ class tfsbga extends Table
         );
 
         // Filter actions with the maximum priority
-        $highestPriority = $actions[0]->priority;
+        $highestPriority = $actions[0]['priority'];
         $filteredActions = array();
         foreach ($actions as $action)
         {
-            if ($action->priority === $highestPriority)
+            if ($action['priority'] === $highestPriority)
             {
                 $filteredActions[] = $action;
             }
@@ -419,10 +427,9 @@ class tfsbga extends Table
 
         // Save the actions data
         $actionsAttributes = array();
-        /** @var \thefirstspine\apiwrapper\resources\ArenaGameAction $filteredAction */
         foreach ($filteredActions as $filteredAction)
         {
-            $actionsAttributes[] = $filteredAction->attributes();
+            $actionsAttributes[] = $filteredAction;
         }
         return $this->storeObject(self::STORAGE__ACTIONS, $actionsAttributes);
     }
@@ -430,17 +437,21 @@ class tfsbga extends Table
     protected function reloadCards($arenaGameId)
     {
         // Get the cards of the ArenaGame instance
+        //TODO: START REPLACE
         $cards = \thefirstspine\apiwrapper\resources\ArenaCard::find(
             array('arena_game_id' => $arenaGameId)
         )->limit(100)->all();
+        //TODO: END REPLACE
 
         // Save the cards data
         $actionsAttributes = array();
+        //TODO: START REPLACE
         /** @var \thefirstspine\apiwrapper\resources\ArenaCard $card */
         foreach ($cards as $card)
         {
             $actionsAttributes[] = $card->attributes();
         }
+        //TODO: END REPLACE
         return $this->storeObject(self::STORAGE__CARDS, $actionsAttributes);
     }
 
@@ -451,11 +462,14 @@ class tfsbga extends Table
         $messagesSent = is_null($messagesSent) ? array() : $messagesSent;
 
         // Get the messages of the ArenaGame instance
+        //TODO: START REPLACE
         $messages = \thefirstspine\apiwrapper\resources\ArenaMessage::findAll(
             array('arena_game_id' => $arenaGameId)
         );
+        //TODO: END REPLACE
 
         // Send & save the messages data
+        //TODO: START REPLACE
         $messagesAttributes = array();
         /** @var \thefirstspine\apiwrapper\resources\ArenaMessage $message */
         foreach ($messages as $message)
@@ -475,6 +489,7 @@ class tfsbga extends Table
             }
             $messagesAttributes[] = $message->attributes();
         }
+        //TODO: END REPLACE
 
         // Save the sent messages
         $this->storeObject(self::STORAGE__MESSAGES_SENT, $messagesSent);
@@ -579,9 +594,11 @@ class tfsbga extends Table
         );
 
         // Get the action to respond
+        //TODO: START REPLACE
         $action = \thefirstspine\apiwrapper\resources\ArenaGameAction::findOne(array(
             'arena_game_action_id' => $arenaGameActionId
         ));
+        //TODO: END REPLACE
 
         // Only respond to the server out of a replay
         if (!$isReplay)
