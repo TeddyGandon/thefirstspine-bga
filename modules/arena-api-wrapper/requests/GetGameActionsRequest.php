@@ -23,9 +23,9 @@ class GetGameActionsRequest extends Request
      */
     protected static function getAttributes()
     {
-        return [
+        return array(
             'arena_game_id',
-        ];
+        );
     }
 
 }

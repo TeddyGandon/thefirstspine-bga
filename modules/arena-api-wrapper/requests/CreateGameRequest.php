@@ -24,10 +24,10 @@ class CreateGameRequest extends Request
      */
     protected static function getAttributes()
     {
-        return [
+        return array(
             'gameType',
             'players',
-        ];
+        );
     }
 
 }

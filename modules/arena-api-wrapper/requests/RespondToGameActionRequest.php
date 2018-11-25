@@ -25,11 +25,11 @@ class RespondToGameActionRequest extends Request
      */
     protected static function getAttributes()
     {
-        return [
+        return array(
             'arena_game_id',
             'arena_game_action_id',
             'response',
-        ];
+        );
     }
 
 }

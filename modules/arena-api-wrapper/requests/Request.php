@@ -31,7 +31,7 @@ abstract class Request
      */
     protected static function getAttributes()
     {
-        return [];
+        return array();
     }
 
     /**
