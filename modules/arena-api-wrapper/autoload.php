@@ -7,6 +7,7 @@ $psr4Classes = array(
     '/requests/GetGameRequest',
     '/requests/GetGameActionsRequest',
     '/requests/RespondToGameActionRequest',
+    '/requests/GetCardsRequest',
 );
 
 foreach ($psr4Classes as $psr4Class)
