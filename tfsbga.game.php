@@ -437,22 +437,11 @@ class tfsbga extends Table
     protected function reloadCards($arenaGameId)
     {
         // Get the cards of the ArenaGame instance
-        //TODO: START REPLACE
-        $cards = \thefirstspine\apiwrapper\resources\ArenaCard::find(
-            array('arena_game_id' => $arenaGameId)
-        )->limit(100)->all();
-        //TODO: END REPLACE
+        $request = new \arenaApiWrapper\requests\GetCardsRequest();
+        $request->arena_game_id = $arenaGameId;
+        $cards = \arenaApiWrapper\core\ArenaApiWrapper::getCards($request);
 
-        // Save the cards data
-        $actionsAttributes = array();
-        //TODO: START REPLACE
-        /** @var \thefirstspine\apiwrapper\resources\ArenaCard $card */
-        foreach ($cards as $card)
-        {
-            $actionsAttributes[] = $card->attributes();
-        }
-        //TODO: END REPLACE
-        return $this->storeObject(self::STORAGE__CARDS, $actionsAttributes);
+        return $this->storeObject(self::STORAGE__CARDS, $cards);
     }
 
     protected function reloadMessages($arenaGameId)
@@ -685,9 +674,11 @@ class tfsbga extends Table
         // Get the game REST entity
         $oldGame = $this->retrieveStoredObject(self::STORAGE__ARENA_GAME);
         $arenaGameId = $oldGame['arena_game_id'];
+        //TODO: START REPLACE
         $game = \thefirstspine\apiwrapper\resources\ArenaGame::find(array(
             'arena_game_id' => $arenaGameId
         ))->one();
+        //TODO: END REPLACE
 
         // Get the player
         $currentPlayer = self::getObjectFromDB("SELECT * FROM player WHERE player_id = {$active_player}");
