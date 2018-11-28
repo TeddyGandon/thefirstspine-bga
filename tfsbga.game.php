@@ -451,39 +451,32 @@ class tfsbga extends Table
         $messagesSent = is_null($messagesSent) ? array() : $messagesSent;
 
         // Get the messages of the ArenaGame instance
-        //TODO: START REPLACE
-        $messages = \thefirstspine\apiwrapper\resources\ArenaMessage::findAll(
-            array('arena_game_id' => $arenaGameId)
-        );
-        //TODO: END REPLACE
+        $request = new \arenaApiWrapper\requests\GetMessagesRequest();
+        $request->arena_game_id = $arenaGameId;
+        $messages = \arenaApiWrapper\core\ArenaApiWrapper::getMessages($request);
 
         // Send & save the messages data
-        //TODO: START REPLACE
-        $messagesAttributes = array();
-        /** @var \thefirstspine\apiwrapper\resources\ArenaMessage $message */
         foreach ($messages as $message)
         {
             // Send the message to the game logs
-            if (!in_array((int) $message->arena_message_id, $messagesSent))
+            if (!in_array((int) $message['arena_message_id'], $messagesSent))
             {
-                $player = $this->getObjectFromDB("SELECT * FROM player WHERE tfs_user_id = {$message->user_id}");
+                $player = $this->getObjectFromDB("SELECT * FROM player WHERE tfs_user_id = {$message['user_id']}");
                 $playerName = $player['player_name'];
-                $messageStr = str_replace('*', '${player_name}', $message->message);
+                $messageStr = str_replace('*', '${player_name}', $message['message']);
                 $this->notifyAllPlayers(
                     'noType',
                     totranslate($messageStr),
                     array('player_name' => $playerName)
                 );
-                $messagesSent[] = (int) $message->arena_message_id;
+                $messagesSent[] = (int) $message['arena_message_id'];
             }
-            $messagesAttributes[] = $message->attributes();
         }
-        //TODO: END REPLACE
 
         // Save the sent messages
         $this->storeObject(self::STORAGE__MESSAGES_SENT, $messagesSent);
 
-        return $this->storeObject(self::STORAGE__MESSAGES, $messagesAttributes);
+        return $this->storeObject(self::STORAGE__MESSAGES, $messages);
     }
 
     protected function actionsProcessor()
@@ -583,20 +576,17 @@ class tfsbga extends Table
         );
 
         // Get the action to respond
-        //TODO: START REPLACE
-        $action = \thefirstspine\apiwrapper\resources\ArenaGameAction::findOne(array(
-            'arena_game_action_id' => $arenaGameActionId
-        ));
-        //TODO: END REPLACE
+        $request = new \arenaApiWrapper\requests\GetGameActionRequest();
+        $request->arena_game_action_id = $arenaGameActionId;
+        $action = \arenaApiWrapper\core\ArenaApiWrapper::getGameAction($request);
 
         // Only respond to the server out of a replay
         if (!$isReplay)
         {
-            $action->response = $response;
-            $action->save();
+            $action['response'] = $response;
         }
 
-        if ($action->reference === 'EndTurn')
+        if ($action['reference'] === 'EndTurn')
         {
             // Increase turn stats
             self::incStat(1, 'turns_played');
@@ -674,19 +664,21 @@ class tfsbga extends Table
         // Get the game REST entity
         $oldGame = $this->retrieveStoredObject(self::STORAGE__ARENA_GAME);
         $arenaGameId = $oldGame['arena_game_id'];
-        //TODO: START REPLACE
-        $game = \thefirstspine\apiwrapper\resources\ArenaGame::find(array(
-            'arena_game_id' => $arenaGameId
-        ))->one();
-        //TODO: END REPLACE
+
+        $request = new \arenaApiWrapper\requests\GetGameRequest();
+        $request->arena_game_id = $arenaGameId;
+        $game = \arenaApiWrapper\core\ArenaApiWrapper::getGame($request);
 
         // Get the player
         $currentPlayer = self::getObjectFromDB("SELECT * FROM player WHERE player_id = {$active_player}");
         $tfsUserId = $currentPlayer['tfs_user_id'];
 
         // Set the player to a zombie in TFS game instance
+        //TODO: Add method to zombify the players
+        /*
         $game->zombies = "[{$tfsUserId}]";
         $game->save();
+        */
 
         // Update game local
         $this->reloadGame();
