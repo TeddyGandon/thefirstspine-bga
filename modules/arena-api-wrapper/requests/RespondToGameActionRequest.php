@@ -6,6 +6,7 @@ namespace arenaApiWrapper\requests;
  * Class RespondToGameActionRequest
  * @property int arena_game_id
  * @property int arena_game_action_id
+ * @property string token
  * @property array response
  * @package arenaApiWrapper\requests
  */
@@ -27,6 +28,7 @@ class RespondToGameActionRequest extends Request
     {
         return array(
             'arena_game_id',
+            'token',
             'arena_game_action_id',
             'response',
         );

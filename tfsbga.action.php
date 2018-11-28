@@ -70,13 +70,6 @@ class action_tfsbga extends APP_GameAction
         self::ajaxResponse();
     }
 
-    public function setJWT()
-    {
-        $arg = self::getArg('jwt', AT_alphanum, true);
-        $this->game->setJWTAction($arg);
-        self::ajaxResponse();
-    }
-
 }
   
 

@@ -248,8 +248,17 @@ class tfsbga extends Table
     public static function getArenaValidAuthTokens()
     {
         return array(
-            827 => 'FSSEe8DZnNRkUy2ntsln6bY7iNnmU9FGjayU5Ka552dcaNyv6HS38Ff9Im4WyO8w6uvjzInsR0PHS3YUPvh0kyWmxY3oehABYDA7',
-            828 =>  'uVMFdNupqj8BrHWjf3v4Y6jonv5SOw4Skraso0DUXH4O9iBc907jp14hukBQ9ftS3bI3x6ccZmqLIyUwupfJqe89Zw3tziEUV3Ss',
+            'FSSEe8DZnNRkUy2ntsln6bY7iNnmU9FGjayU5Ka552dcaNyv6HS38Ff9Im4WyO8w6uvjzInsR0PHS3YUPvh0kyWmxY3oehABYDA7',
+            'uVMFdNupqj8BrHWjf3v4Y6jonv5SOw4Skraso0DUXH4O9iBc907jp14hukBQ9ftS3bI3x6ccZmqLIyUwupfJqe89Zw3tziEUV3Ss',
+        );
+    }
+
+    public static function getArenaValidAuthTokensByUserId()
+    {
+        $tokens = self::getArenaValidAuthTokens();
+        return array(
+            827 => $tokens[0],
+            828 => $tokens[1],
         );
     }
 
@@ -548,23 +557,6 @@ class tfsbga extends Table
     
     */
 
-    public function setJWTAction($jwt)
-    {
-        $this->beforeAction(self::ACTION_CATEGORY__UTILITY);
-
-        // Retrieve the JWT data
-        $jwtExploded = explode('.', $jwt);
-        $userJwt = base64_decode($jwtExploded[0]);
-        $userJwtObject = json_decode($userJwt, true);
-
-        // Save it
-        $storedJwt = $this->retrieveStoredObject('jwt');
-        $storedJwt[$this->getCurrentPlayerId()] = $userJwtObject;
-        $this->storeObject(self::STORAGE__JWT, $storedJwt);
-
-        $this->afterAction(self::ACTION_CATEGORY__UTILITY);
-    }
-
     public function responseToAction($arenaGameActionId, $response)
     {
         $this->beforeAction(self::ACTION_CATEGORY__USER_MOVE);
@@ -575,15 +567,26 @@ class tfsbga extends Table
             preg_match('/replayFrom/', $_SERVER['HTTP_REFERER'])
         );
 
-        // Get the action to respond
-        $request = new \arenaApiWrapper\requests\GetGameActionRequest();
-        $request->arena_game_action_id = $arenaGameActionId;
-        $action = \arenaApiWrapper\core\ArenaApiWrapper::getGameAction($request);
-
         // Only respond to the server out of a replay
         if (!$isReplay)
         {
-            $action['response'] = $response;
+            $request = new \arenaApiWrapper\requests\GetGameActionRequest();
+            $request->arena_game_action_id = $arenaGameActionId;
+            $action = \arenaApiWrapper\core\ArenaApiWrapper::getGameAction($request);
+
+            $authTokens = self::getArenaValidAuthTokensByUserId();
+            $request = new \arenaApiWrapper\requests\RespondToGameActionRequest();
+            $request->arena_game_action_id = $arenaGameActionId;
+            $request->arena_game_id = $action['arena_game_id'];
+            $request->response = $response;
+            $request->token = $authTokens[$action['user_id']];
+            $action = \arenaApiWrapper\core\ArenaApiWrapper::respondToGameAction($request);
+        }
+        else
+        {
+            $request = new \arenaApiWrapper\requests\GetGameActionRequest();
+            $request->arena_game_action_id = $arenaGameActionId;
+            $action = \arenaApiWrapper\core\ArenaApiWrapper::getGameAction($request);
         }
 
         if ($action['reference'] === 'EndTurn')
