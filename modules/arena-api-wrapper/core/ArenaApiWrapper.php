@@ -4,8 +4,10 @@ namespace arenaApiWrapper\core;
 
 use arenaApiWrapper\requests\CreateGameRequest;
 use arenaApiWrapper\requests\GetCardsRequest;
+use arenaApiWrapper\requests\GetGameActionRequest;
 use arenaApiWrapper\requests\GetGameActionsRequest;
 use arenaApiWrapper\requests\GetGameRequest;
+use arenaApiWrapper\requests\GetMessagesRequest;
 use arenaApiWrapper\requests\Request;
 use arenaApiWrapper\requests\RespondToGameActionRequest;
 
@@ -112,6 +114,21 @@ abstract class ArenaApiWrapper
     }
 
     /**
+     * @param GetGameActionRequest $request
+     * @throws \Exception
+     * @return array|null
+     */
+    public static function getGameAction($request)
+    {
+        if (!$request instanceof GetGameActionRequest)
+        {
+            throw new \Exception("Request should be a GetGameActionRequest");
+        }
+
+        return self::callAPI($request);
+    }
+
+    /**
      * @param GetGameRequest $request
      * @throws \Exception
      * @return array|null
@@ -151,6 +168,21 @@ abstract class ArenaApiWrapper
         if (!$request instanceof RespondToGameActionRequest)
         {
             throw new \Exception("Request should be a RespondToGameActionRequest");
+        }
+
+        return self::callAPI($request);
+    }
+
+    /**
+     * @param GetMessagesRequest $request
+     * @throws \Exception
+     * @return array|null
+     */
+    public static function getMessages($request)
+    {
+        if (!$request instanceof GetMessagesRequest)
+        {
+            throw new \Exception("Request should be a GetMessagesRequest");
         }
 
         return self::callAPI($request);
