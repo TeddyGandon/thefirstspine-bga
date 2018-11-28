@@ -90,9 +90,6 @@ define([
                 // Setup game notifications to handle (see "setupNotifications" method below)
                 this.setupNotifications();
 
-                // Get the user ID according with the TFS SSO
-                this.setupSSO();
-
                 // Setup events listeners
                 $('zoom').addEventListener('click', function(e) {
                     $('zoom').classList.remove('displayed');
@@ -188,35 +185,6 @@ define([
                 $('zoom-image').className = 'card-spritesheet card-spritesheet-'+image;
                 $('zoom-name').textContent = _(name);
                 $('zoom-description').innerHTML = _(description);
-            },
-
-            setupSSO: function () {
-                const url = 'https://www.thefirstspine.fr/api/sso?key=bga-studio';
-                const request = new XMLHttpRequest();
-                const self = this;
-                request.withCredentials = true;
-                request.open('GET', url, true);
-                request.send();
-                request.onreadystatechange = function () {
-                    if (request.readyState == 4) {
-                        if (request.status == 200) {
-                            const jwt = request.response.split('.');
-                            self.ajaxcall("/tfsbga/tfsbga/setJWT.html", {
-                                    jwt: jwt[1]
-                                },
-                                self,
-                                function (result) {
-                                    // What to do after the server call if it succeeded
-                                    // (most of the time: nothing)
-                                },
-                                function (is_error) {
-                                    // What to do after the server call in anyway (success or failure)
-                                    // (most of the time: nothing)
-                                }
-                            );
-                        }
-                    }
-                }
             },
 
             setGame: function (game) {
