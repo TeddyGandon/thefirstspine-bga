@@ -20,9 +20,6 @@
 require_once(APP_GAMEMODULE_PATH . 'module/table/table.game.php');
 
 // Add TFS API wrapper file
-include(__DIR__ . '/modules/api-wrapper/autoload.php');
-
-// Add TFS API wrapper file
 include(__DIR__ . '/modules/arena-api-wrapper/autoload.php');
 
 
