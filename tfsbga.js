@@ -402,8 +402,8 @@ define([
 
                 // Set the message
                 $('generalactions').innerHTML = '<br />' + _(script.message) + '<br />';
-                this.addActionButton('validate', _('Valider'), 'validateActionScript', 'generalactions');
-                this.addActionButton('cancel', _('Annuler'), 'cancelActionScript', 'generalactions');
+                this.addActionButton('validate', _('Validate'), 'validateActionScript', 'generalactions');
+                this.addActionButton('cancel', _('Cancel'), 'cancelActionScript', 'generalactions');
 
                 // Call the script
                 this['action_'+script.type]();
