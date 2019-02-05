@@ -577,7 +577,7 @@ class tfsbga extends Table
             $request->arena_game_id = $action['arena_game_id'];
             $request->response = $response;
             $request->token = $authTokens[$action['user_id']];
-            $action = \arenaApiWrapper\core\ArenaApiWrapper::respondToGameAction($request);
+            \arenaApiWrapper\core\ArenaApiWrapper::respondToGameAction($request);
         }
         else
         {
@@ -586,7 +586,11 @@ class tfsbga extends Table
             $action = \arenaApiWrapper\core\ArenaApiWrapper::getGameAction($request);
         }
 
-        if ($action['reference'] === 'EndTurn')
+        // For game stats
+        $request = new \arenaApiWrapper\requests\GetGameActionsRequest();
+        $request->arena_game_id = $action['arena_game_id'];
+        $actions = \arenaApiWrapper\core\ArenaApiWrapper::getGameActions($request);
+        if (isset($actions[0]) && $actions[0]['reference'] === 'EndTurn')
         {
             // Increase turn stats
             self::incStat(1, 'turns_played');
