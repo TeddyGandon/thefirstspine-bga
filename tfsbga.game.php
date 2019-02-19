@@ -421,13 +421,16 @@ class tfsbga extends Table
         );
 
         // Filter actions with the maximum priority
-        $highestPriority = $actions[0]['priority'];
         $filteredActions = array();
-        foreach ($actions as $action)
+        if (isset($actions[0]))
         {
-            if ($action['priority'] === $highestPriority)
+            $highestPriority = $actions[0]['priority'];
+            foreach ($actions as $action)
             {
-                $filteredActions[] = $action;
+                if ($action['priority'] === $highestPriority)
+                {
+                    $filteredActions[] = $action;
+                }
             }
         }
 
@@ -489,6 +492,12 @@ class tfsbga extends Table
     {
         // Get the current actions
         $actions = $this->retrieveStoredObject(self::STORAGE__ACTIONS);
+
+        // Skip when empty
+        if (empty($actions))
+        {
+            return;
+        }
 
         // All the actions should be the same for a same game ID in the API
         $userId = $actions[0]['user_id'];
@@ -577,7 +586,11 @@ class tfsbga extends Table
             $request->arena_game_id = $action['arena_game_id'];
             $request->response = $response;
             $request->token = $authTokens[$action['user_id']];
-            \arenaApiWrapper\core\ArenaApiWrapper::respondToGameAction($request);
+
+            try
+            {
+                \arenaApiWrapper\core\ArenaApiWrapper::respondToGameAction($request);
+            } catch (Exception $e) {}
         }
         else
         {
