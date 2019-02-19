@@ -210,8 +210,8 @@ span.stats.capacity {
 
 #hand .card {
     display: inline-block;
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     margin-right: -30px;
     margin-left: -30px;
     background-color: black;
@@ -239,6 +239,10 @@ span.stats.capacity {
 
 .card.selected, .cell.selected {
     box-shadow: #F00 10px 10px 0, #F00 -10px -10px 0, #F00 -10px 10px 0, #F00 10px -10px 0, #F00 0 0 10px inset!important;
+}
+
+.card.selected:after, .cell.selected:after {
+    background: rgba(255,255,255,.75)!important;
 }
 
 .card.selectable:after, .cell.selectable:after {
