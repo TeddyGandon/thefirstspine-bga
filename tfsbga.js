@@ -326,7 +326,7 @@ define([
                 }
             },
 
-            setActions: function (actions) {
+            setActions: function (actions, exitAutoChose) {
                 if (!actions || !this.currentGame || this.currentGame.is_opened == 0) return;
                 this.actions = actions;
 
@@ -346,6 +346,8 @@ define([
                         'generalactions'
                     );
                 }
+
+                if (exitAutoChose) return;
 
                 if (this.actions.length === 1) {
                     this.choseAction(this.actions[0].arena_game_action_id);
@@ -477,7 +479,7 @@ define([
             },
 
             cancelActionScript: function () {
-                this.setActions(this.actions);
+                this.setActions(this.actions, true);
             },
 
             action_choseCards: function () {
