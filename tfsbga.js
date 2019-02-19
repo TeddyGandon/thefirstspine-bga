@@ -34,10 +34,20 @@ define([
             constructor: function () {
                 window['$scope'] = this;
 
+                // Setup board size
+                window.addEventListener('resize', this.resize);
+                this.resize();
+
                 // Here, you can init the global variables of your user interface
                 // Example:
                 // this.myGlobalValue = 0;
 
+            },
+
+            resize: function () {
+              document.getElementById('board').style['height'] =
+                document.getElementById('board').style['width'] =
+                  (window.innerHeight - 100) + 'px';
             },
 
             /*

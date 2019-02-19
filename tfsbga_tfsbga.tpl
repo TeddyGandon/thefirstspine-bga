@@ -32,7 +32,7 @@
 </div>
 
 <div class="whiteblock clearfix text-center">
-    <div id="board" class="clearfix">
+    <div id="board" class="clearfix" style="width: 400px; height: 400px;">
     </div>
 </div>
 
