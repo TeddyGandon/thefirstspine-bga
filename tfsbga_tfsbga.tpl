@@ -27,13 +27,13 @@
 
 <div id="code" class="whiteblock clearfix text-center"></div>
 
-<div class="whiteblock clearfix text-center">
-    <div id="board" class="clearfix">
-    </div>
-</div>
-
 <div class="whiteblock">
     <div id="hand"></div>
+</div>
+
+<div class="whiteblock clearfix text-center">
+    <div id="board" class="clearfix" style="width: 400px; height: 400px;">
+    </div>
 </div>
 
 <div id="zoom">

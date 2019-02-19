@@ -174,17 +174,16 @@ span.stats.capacity {
 
 #board {
     display: block;
-    width: 100%;
-    max-width: 1200px;
     margin: 0 auto;
     background-color: #334;
     background-image: url(img/board.jpg);
     background-size: contain;
+    overflow: hidden;
 }
 
 #board .cell {
     float: left;
-    width: 14.2857143%;
+    height: 14.2857143%;
     position: relative;
 }
 
@@ -200,7 +199,7 @@ span.stats.capacity {
 }
 
 #board .cell img {
-    width: 100%;
+    height: 100%;
 }
 
 /* HAND */
@@ -234,16 +233,18 @@ span.stats.capacity {
 
 .card.selectable, .cell.selectable {
     cursor: pointer;
+    box-shadow: #F00 5px 5px 0, #F00 -5px -5px 0, #F00 -5px 5px 0, #F00 5px -5px 0, #F00 0 0 5px inset;
+    z-index: 1;
 }
 
-.card.selected:after, .cell.selected:after {
-    background: rgba(255,255,255,.75)!important;
+.card.selected, .cell.selected {
+    box-shadow: #F00 10px 10px 0, #F00 -10px -10px 0, #F00 -10px 10px 0, #F00 10px -10px 0, #F00 0 0 10px inset!important;
 }
 
 .card.selectable:after, .cell.selectable:after {
     content: " ";
     position: absolute;
-    top: 30%;
+    top: 50%;
     left: 50%;
     width: 50px;
     height: 50px;
@@ -256,6 +257,7 @@ span.stats.capacity {
     animation-timing-function: ease;
     animation-iteration-count: 3000;
     transform-origin: 50% 50%;
+    pointer-events: none;
 }
 
 .card .marker, .card .button {
@@ -317,12 +319,15 @@ span.stats.capacity {
 @keyframes animationFrames{
     0% {
         transform:  scaleX(1.00) scaleY(1.00) ;
+        opacity: 1;
     }
     51% {
-        transform:  scaleX(0.50) scaleY(0.50) ;
+        transform:  scaleX(0.0) scaleY(0.0) ;
+        opacity: 0;
     }
     100% {
         transform:  scaleX(1.00) scaleY(1.00) ;
+        opacity: 1;
     }
 }
 
