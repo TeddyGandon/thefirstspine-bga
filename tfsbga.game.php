@@ -105,7 +105,6 @@ class tfsbga extends Table
 
         // Setup the initial game situation here
         $destinies = self::getArenaValidDestinies();
-        $origins = self::getArenaValidOrigins();
         $authTokens = self::getArenaValidAuthTokens();
 
         $request = new \arenaApiWrapper\requests\CreateGameRequest();
@@ -114,12 +113,12 @@ class tfsbga extends Table
             array(
                 'token' => $authTokens[0],
                 'destiny' => $destinies[rand(1, 3)],
-                'origin' => $origins[rand(1, 3)],
+                'origin' => null,
             ),
             array(
                 'token' => $authTokens[1],
                 'destiny' => $destinies[rand(1, 3)],
-                'origin' => $origins[rand(1, 3)],
+                'origin' => null,
             ),
         );
         $game = \arenaApiWrapper\core\ArenaApiWrapper::createGame($request);
