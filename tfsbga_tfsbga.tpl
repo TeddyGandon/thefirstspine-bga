@@ -38,17 +38,17 @@
 
 <script type="text/javascript">
 
-    // Javascript HTML templates
+  // Javascript HTML templates
 
-    /*
-     // Example:
-     var jstpl_some_game_item='<div class="my_game_item" id="my_game_item_${id}"></div>';
+  /*
+   // Example:
+   var jstpl_some_game_item='<div class="my_game_item" id="my_game_item_${id}"></div>';
 
-     */
+   */
 
-    const jstpl_square = '<div id="cell_${x}-${y}" data-x="${x}" data-y="${y}" class="cell"></div>';
-    const jstpl_card = '<div id="card-${arena_card_id}" class="card card-${arena_card_id} card-spritesheet card-spritesheet-${view.spritesheetId}" style="transform: rotate(${view.rotation}deg); background-color: ${view.color}" title="${card.name}" data-type="${card.type}" data-id="${arena_card_id}" data-user_id="${user_id}" data-spritesheet-id="${view.spritesheetId}" data-name="${card.name}"></div>';
-    const jstpl_marker = '<div class="marker marker-${type} marker-${type}-${value}">${value}</div>';
+  const jstpl_square = '<div id="cell_${x}-${y}" data-x="${x}" data-y="${y}" class="cell"></div>';
+  const jstpl_card = '<div id="card-${arena_card_id}" class="card card-${arena_card_id} card-spritesheet card-spritesheet-${view.spritesheetId}" style="transform: rotate(${view.rotation}deg); background-color: ${view.color}" data-type="${card.type}" data-id="${arena_card_id}" data-user_id="${user_id}" data-spritesheet-id="${view.spritesheetId}" data-name="${card.name}"></div>';
+  const jstpl_marker = '<div class="marker marker-${type} marker-${type}-${value}">${value}</div>';
 
 </script>
 
