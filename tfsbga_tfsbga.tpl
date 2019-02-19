@@ -36,14 +36,6 @@
     </div>
 </div>
 
-<div id="zoom">
-    <div class="zoom-content">
-        <div id="zoom-name"></div>
-        <div id="zoom-image"></div>
-        <div id="zoom-description"></div>
-    </div>
-</div>
-
 <script type="text/javascript">
 
     // Javascript HTML templates
@@ -55,7 +47,7 @@
      */
 
     const jstpl_square = '<div id="cell_${x}-${y}" data-x="${x}" data-y="${y}" class="cell"></div>';
-    const jstpl_card = '<div id="card-${arena_card_id}" class="card card-spritesheet card-spritesheet-${view.spritesheetId}" style="transform: rotate(${view.rotation}deg); background-color: ${view.color}" title="${card.name}" data-type="${card.type}" data-id="${arena_card_id}" data-user_id="${user_id}" data-spritesheet-id="${view.spritesheetId}" data-name="${card.name}" data-descriptionEscaped="${view.descriptionEscaped}"><span onclick="$scope.zoom(this)" class="zoom bgabutton bgabutton_blue"><span class="fa fa-eye"></span></span></div>';
+    const jstpl_card = '<div id="card-${arena_card_id}" class="card card-${arena_card_id} card-spritesheet card-spritesheet-${view.spritesheetId}" style="transform: rotate(${view.rotation}deg); background-color: ${view.color}" title="${card.name}" data-type="${card.type}" data-id="${arena_card_id}" data-user_id="${user_id}" data-spritesheet-id="${view.spritesheetId}" data-name="${card.name}"></div>';
     const jstpl_marker = '<div class="marker marker-${type} marker-${type}-${value}">${value}</div>';
 
 </script>

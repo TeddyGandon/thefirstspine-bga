@@ -99,11 +99,6 @@ define([
 
                 // Setup game notifications to handle (see "setupNotifications" method below)
                 this.setupNotifications();
-
-                // Setup events listeners
-                $('zoom').addEventListener('click', function(e) {
-                    $('zoom').classList.remove('displayed');
-                });
             },
 
 
@@ -186,17 +181,6 @@ define([
 
              */
 
-            zoom: function (btn) {
-                const image = btn.parentNode.getAttribute('data-spritesheet-id');
-                const name = btn.parentNode.getAttribute('data-name');
-                const description = base64Decode(btn.parentNode.getAttribute('data-descriptionEscaped'));
-
-                $('zoom').classList.add('displayed');
-                $('zoom-image').className = 'card-spritesheet card-spritesheet-'+image;
-                $('zoom-name').textContent = _(name);
-                $('zoom-description').innerHTML = _(description);
-            },
-
             setGame: function (game) {
                 if (!game || !game.board) return;
                 this.currentGame = game;
@@ -242,7 +226,6 @@ define([
                     } else {
                         game.board[i].view.color = 'white';
                     }
-                    game.board[i].view.descriptionEscaped = base64Encode(game.board[i].card.description);
                     // Place template
                     dojo.place(
                         this.format_block(
@@ -251,6 +234,12 @@ define([
                         ),
                         'cell_' + game.board[i].position
                     );
+                    this.addTooltipToClass(
+                      'card-' + game.board[i].arena_card_id,
+                      _(game.board[i].card.description),
+                      ''
+                    );
+
                     if (game.board[i].options !== null) {
                         // Add life marker
                         if (game.board[i].options.life && game.board[i].options.life != 0) {
@@ -311,8 +300,7 @@ define([
                     hand[i].view = {
                         rotation: 0,
                         color: 'black',
-                        spritesheetId: hand[i].card.image.replace('images/cards70', '').replace('.png', ''),
-                        descriptionEscaped: base64Encode(hand[i].card.description)
+                        spritesheetId: hand[i].card.image.replace('images/cards70', '').replace('.png', '')
                     };
                     // Place template
                     var card = dojo.place(
@@ -321,6 +309,11 @@ define([
                             hand[i]
                         ),
                         'hand'
+                    );
+                    this.addTooltipToClass(
+                      'card-' + hand[i].arena_card_id,
+                      '',
+                      _(hand[i].card.description)
                     );
                     card.addEventListener('click', this.onChoseCard);
                 }
