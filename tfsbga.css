@@ -233,16 +233,18 @@ span.stats.capacity {
 
 .card.selectable, .cell.selectable {
     cursor: pointer;
+    box-shadow: #F00 5px 5px 0, #F00 -5px -5px 0, #F00 -5px 5px 0, #F00 5px -5px 0, #F00 0 0 5px inset;
+    z-index: 1;
 }
 
-.card.selected:after, .cell.selected:after {
-    background: rgba(255,255,255,.75)!important;
+.card.selected, .cell.selected {
+    box-shadow: #F00 10px 10px 0, #F00 -10px -10px 0, #F00 -10px 10px 0, #F00 10px -10px 0, #F00 0 0 10px inset!important;
 }
 
 .card.selectable:after, .cell.selectable:after {
     content: " ";
     position: absolute;
-    top: 30%;
+    top: 50%;
     left: 50%;
     width: 50px;
     height: 50px;
@@ -255,6 +257,7 @@ span.stats.capacity {
     animation-timing-function: ease;
     animation-iteration-count: 3000;
     transform-origin: 50% 50%;
+    pointer-events: none;
 }
 
 .card .marker, .card .button {
@@ -316,12 +319,15 @@ span.stats.capacity {
 @keyframes animationFrames{
     0% {
         transform:  scaleX(1.00) scaleY(1.00) ;
+        opacity: 1;
     }
     51% {
-        transform:  scaleX(0.50) scaleY(0.50) ;
+        transform:  scaleX(0.0) scaleY(0.0) ;
+        opacity: 0;
     }
     100% {
         transform:  scaleX(1.00) scaleY(1.00) ;
+        opacity: 1;
     }
 }
 
