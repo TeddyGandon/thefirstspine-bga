@@ -45,9 +45,12 @@ define([
       },
 
       resize: function () {
+        const maxWidth = 1200;
+        const width = window.innerWidth < maxWidth ? window.innerWidth : maxWidth;
         document.getElementById('board').style['height'] =
           document.getElementById('board').style['width'] =
-            (window.innerHeight - 100) + 'px';
+            (width - 430) + 'px';
+        document.getElementById('container').style['width']= (width - 430 + 160) + 'px';
       },
 
       /*
@@ -215,12 +218,15 @@ define([
               game.board[i].view.spritesheetId = '';
             }
           }
+          let rotation = 0;
           if (game.board[i].user_id == game.users[0].user_id) {
-            game.board[i].view.rotation = 180;
+              rotation = 180;
           }
-          if (game.board[i].user_id == game.users[2].user_id) {
-            game.board[i].view.rotation = 0;
+          let absoluteRotation = rotation;
+          if(game.users[0].user_id == this.currentUserId) {
+              absoluteRotation -= 180;
           }
+          game.board[i].view.rotation = rotation;
           if (game.board[i].user_id == this.currentUserId) {
             game.board[i].view.color = 'black';
           } else {
@@ -234,11 +240,13 @@ define([
             ),
             'cell_' + game.board[i].position
           );
-          this.addTooltipToClass(
-            'card-' + game.board[i].arena_card_id,
-            _(game.board[i].card.name) + '<br />' + _(game.board[i].card.description),
-            ''
-          );
+          if (game.board[i].card) {
+            this.addTooltipToClass(
+              'card-' + game.board[i].arena_card_id,
+              `<div class="minicard card-spritesheet card-spritesheet-${game.board[i].card.image.replace('images/cards70', '').replace('.png', '')}"></div>`,
+              ''
+            );
+          }
 
           if (game.board[i].options !== null) {
             // Add life marker
@@ -248,7 +256,8 @@ define([
                   'jstpl_marker',
                   {
                     type: 'life',
-                    value: game.board[i].options.life
+                    value: game.board[i].options.life,
+                    rotation: -absoluteRotation
                   }
                 ),
                 'card-'+game.board[i].arena_card_id
@@ -310,11 +319,13 @@ define([
             ),
             'hand'
           );
-          this.addTooltipToClass(
-            'card-' + hand[i].arena_card_id,
-            '',
-            _(hand[i].card.name) + '<br />' + _(hand[i].card.description)
-          );
+          if (hand[i].card) {
+            this.addTooltipToClass(
+              'card-' + hand[i].arena_card_id,
+              `<div class="minicard card-spritesheet card-spritesheet-${hand[i].card.image.replace('images/cards70', '').replace('.png', '')}"></div>`,
+              ''
+            );
+          }
           card.addEventListener('click', this.onChoseCard);
         }
       },
