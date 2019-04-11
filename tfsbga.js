@@ -270,7 +270,8 @@ define([
                   'jstpl_marker',
                   {
                     type: 'str',
-                    value: game.board[i].options.str
+                    value: game.board[i].options.str,
+                    rotation: -absoluteRotation
                   }
                 ),
                 'card-'+game.board[i].arena_card_id
@@ -284,7 +285,8 @@ define([
                     'jstpl_marker',
                     {
                       type: 'capacity-' + game.board[i].options.capacities[j],
-                      value: ''
+                      value: '',
+                      rotation: -absoluteRotation
                     }
                   ),
                   'card-'+game.board[i].arena_card_id
